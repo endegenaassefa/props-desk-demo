@@ -1,7 +1,7 @@
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
-import { POST, GET } from "./route.ts";
+import { POST, GET } from "./route";
 
 const RAW_KEY = crypto.randomBytes(24);
 const SECRET = "whsec_" + RAW_KEY.toString("base64");
