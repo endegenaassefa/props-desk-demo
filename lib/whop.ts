@@ -76,6 +76,11 @@ export function verifyWhopWebhook(
   // Replay protection: reject stale or future-dated timestamps.
   const tolerance = options.toleranceSeconds ?? 300;
   if (tolerance > 0) {
+    // Standard Webhooks timestamps are integer unix seconds. Reject anything
+    // else (fractions, exponent notation, hex, signs) even if correctly signed.
+    if (!/^\d+$/.test(timestamp)) {
+      return { valid: false, reason: "invalid timestamp" };
+    }
     const ts = Number(timestamp);
     if (!Number.isFinite(ts)) {
       return { valid: false, reason: "invalid timestamp" };
@@ -100,20 +105,24 @@ export function verifyWhopWebhook(
   const expectedBuf = Buffer.from(expected, "utf8");
 
   // The header is a space-separated list of `<version>,<signature>` entries.
-  // Compare against every entry, constant-time, and accept if any matches.
+  // Only entries that explicitly carry the "v1," prefix are considered — a bare
+  // signature with no version prefix is malformed and rejected (spec compliance).
   const candidates = signature
     .split(" ")
     .map((part) => {
       const comma = part.indexOf(",");
-      if (comma === -1) return { version: SIGNATURE_VERSION, sig: part };
+      if (comma === -1) return { version: "", sig: "" };
       return { version: part.slice(0, comma), sig: part.slice(comma + 1) };
     })
     .filter((c) => c.version === SIGNATURE_VERSION && c.sig.length > 0);
 
+  // Each candidate is compared to the expected signature with a constant-time,
+  // length-guarded compare (timingSafeEqual throws on length mismatch, so we
+  // check length first — a wrong-length forgery can't trigger an exception).
+  // Note: the surrounding list iteration is NOT constant-time, but that only
+  // reveals whether/which candidate matched, never the secret.
   const matched = candidates.some((c) => {
     const candidateBuf = Buffer.from(c.sig, "utf8");
-    // timingSafeEqual throws on length mismatch — guard first so a wrong-length
-    // forgery can't cause an exception (and we still avoid early-exit compares).
     if (candidateBuf.length !== expectedBuf.length) return false;
     return crypto.timingSafeEqual(candidateBuf, expectedBuf);
   });

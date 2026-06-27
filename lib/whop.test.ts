@@ -104,3 +104,34 @@ test("rejects a signature of the wrong length without throwing (timing-safe guar
   const r = verifyWhopWebhook(BODY, headers, SECRET, { nowMs: NOW_MS });
   assert.equal(r.valid, false);
 });
+
+test("rejects a bare signature with no 'v1,' version prefix (spec compliance)", () => {
+  // The correct HMAC, but delivered without the required "v1," prefix.
+  const signed = `${ID}.${TS}.${BODY}`;
+  const bare = crypto.createHmac("sha256", RAW_KEY).update(signed, "utf8").digest("base64");
+  const headers = { id: ID, timestamp: TS, signature: bare };
+  const r = verifyWhopWebhook(BODY, headers, SECRET, { nowMs: NOW_MS });
+  assert.equal(r.valid, false);
+});
+
+test("rejects an unknown signature version even with a valid v1 sig present is still ok", () => {
+  // A v2 entry we can't verify, alongside the real v1 — should still accept.
+  const good = goodHeaders();
+  good.signature = `v2,${"Z".repeat(44)} ${good.signature}`;
+  const r = verifyWhopWebhook(BODY, good, SECRET, { nowMs: NOW_MS });
+  assert.equal(r.valid, true);
+});
+
+test("rejects a non-integer (fractional) timestamp even if correctly signed", () => {
+  const fractionalTs = `${Math.floor(NOW_MS / 1000)}.5`;
+  const headers = { id: ID, timestamp: fractionalTs, signature: sign(ID, fractionalTs, BODY) };
+  const r = verifyWhopWebhook(BODY, headers, SECRET, { nowMs: NOW_MS });
+  assert.equal(r.valid, false);
+});
+
+test("rejects a non-numeric timestamp like '1e9' even if correctly signed", () => {
+  const sciTs = "1e9";
+  const headers = { id: ID, timestamp: sciTs, signature: sign(ID, sciTs, BODY) };
+  const r = verifyWhopWebhook(BODY, headers, SECRET, { nowMs: NOW_MS });
+  assert.equal(r.valid, false);
+});

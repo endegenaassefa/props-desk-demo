@@ -28,6 +28,34 @@ function jsonResponse(body: unknown, status: number): Response {
   });
 }
 
+/**
+ * Best-effort in-memory idempotency for webhook-id, so a delivery replayed
+ * within the signature window isn't processed twice.
+ *
+ * IMPORTANT: this lives in module memory, which on Vercel is per-instance and
+ * not shared across concurrent serverless instances or cold starts. It catches
+ * the common case (Whop re-delivering to the same warm instance) but is NOT a
+ * durable guarantee. For production fulfillment that must run exactly once, back
+ * this with a durable store (Vercel KV / Redis / a DB unique constraint) keyed
+ * on webhook-id. See HANDOFF.md.
+ */
+const SEEN_TTL_MS = 10 * 60 * 1000; // 10 minutes
+const seenWebhookIds = new Map<string, number>();
+
+function isDuplicate(webhookId: string): boolean {
+  const now = Date.now();
+  // Opportunistic prune so the map can't grow unbounded.
+  if (seenWebhookIds.size > 5000) {
+    for (const [id, expiry] of seenWebhookIds) {
+      if (expiry <= now) seenWebhookIds.delete(id);
+    }
+  }
+  const expiry = seenWebhookIds.get(webhookId);
+  if (expiry && expiry > now) return true;
+  seenWebhookIds.set(webhookId, now + SEEN_TTL_MS);
+  return false;
+}
+
 /** Pull only non-sensitive identifiers out of an event for logging (no PII). */
 function safeMeta(event: Record<string, unknown>): Record<string, unknown> {
   const data = (event?.data ?? {}) as Record<string, unknown>;
@@ -53,11 +81,12 @@ export async function POST(req: Request): Promise<Response> {
 
   // The raw body text is required to verify the signature byte-for-byte.
   const rawBody = await req.text();
+  const webhookId = req.headers.get("webhook-id");
 
   const result = verifyWhopWebhook(
     rawBody,
     {
-      id: req.headers.get("webhook-id"),
+      id: webhookId,
       timestamp: req.headers.get("webhook-timestamp"),
       signature: req.headers.get("webhook-signature"),
     },
@@ -70,11 +99,24 @@ export async function POST(req: Request): Promise<Response> {
     return jsonResponse({ ok: false, error: "Invalid signature" }, 401);
   }
 
-  let event: Record<string, unknown>;
+  let parsed: unknown;
   try {
-    event = JSON.parse(rawBody) as Record<string, unknown>;
+    parsed = JSON.parse(rawBody);
   } catch {
     return jsonResponse({ ok: false, error: "Invalid JSON" }, 400);
+  }
+
+  // A verified-but-non-object payload (null, array, primitive) is malformed —
+  // reject cleanly instead of throwing on property access later.
+  if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
+    return jsonResponse({ ok: false, error: "Unexpected payload shape" }, 400);
+  }
+  const event = parsed as Record<string, unknown>;
+
+  // Idempotency: acknowledge (200) but skip reprocessing a replayed delivery.
+  if (webhookId && isDuplicate(webhookId)) {
+    console.info(`[whop] duplicate delivery ignored: ${webhookId}`);
+    return jsonResponse({ ok: true, duplicate: true }, 200);
   }
 
   // Whop payloads carry the event name in `action` (e.g. "payment.succeeded").
