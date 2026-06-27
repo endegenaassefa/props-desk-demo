@@ -13,8 +13,10 @@ approved demo (`docs/legacy-demo.html`).
 | `pricing.png` | Pricing tiers + featured Monthly + coaching bar |
 | `faq-open.png` | FAQ accordion, first item expanded |
 | `home-mobile.png` | Home hero at 375px (single column, nav links collapse) |
+| `tablet-pricing.png` | Pricing at 768px (tiers collapse to a 2-column grid) |
 | `legal-terms.png` | Terms of Service page (draft-for-review banner) |
 | `not-found.png` | Branded 404 |
+| `og-image.png` | The generated Open Graph / Twitter social card (1200×630) |
 
 Result: **hero and record are pixel-identical** to the demo; board, pricing, FAQ,
 mobile, legal, and 404 all render correctly. FAQ accordion toggles with correct
