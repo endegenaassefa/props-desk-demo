@@ -223,6 +223,17 @@ footer{border-top:1px solid var(--line);padding:50px 0 36px;background:var(--ink
 .legal a.inline{color:var(--signal);border-bottom:1px solid rgba(55,228,147,.4)}
 .legal strong{color:var(--cream)}
 
+/* Receipts / proof gallery */
+#receipts{background:var(--ink-2)}
+.proof-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.proof{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s var(--ease),border-color .2s}
+.proof:hover{transform:translateY(-4px);border-color:var(--cream-dim)}
+.proof img{width:100%;height:230px;object-fit:cover;object-position:top center;background:#f4f6f8;border-bottom:1px solid var(--line);display:block}
+.proof figcaption{padding:13px 15px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.4;color:var(--cream-dim);letter-spacing:.01em;display:flex;align-items:center;gap:7px}
+.proof figcaption::before{content:"✓";color:var(--signal);font-weight:700}
+@media(max-width:860px){.proof-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.proof-grid{grid-template-columns:1fr}.proof img{height:auto;max-height:380px}}
+
 /* About / who's behind the read */
 .about-grid{display:grid;grid-template-columns:1.25fr .9fr;gap:44px;align-items:start}
 .about-lede p{color:var(--cream-dim);font-size:16.5px;line-height:1.65;margin-bottom:16px}

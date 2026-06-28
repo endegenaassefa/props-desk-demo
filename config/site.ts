@@ -204,14 +204,15 @@ export const site = {
   },
 
   // --- Stat strip (hero count-ups) ----------------------------------------
-  // NOTE (constraint #2): hit rate is intentionally a modest ~55.9% and NOT the
-  // hero metric. Net units + the tracked record carry the trust, not a big %.
+  // DRAFT — client's self-reported claim (89%) + real channel data (volume,
+  // 3-yr history since Jul 2023, member count). Client confirms/replaces the
+  // claimed figures. The PREVIEW banner stays up until then.
   stats: [
-    { to: 106.7, dec: 1, pre: "+", suf: "u", pos: true, label: "Net units" },
-    { to: 9.4, dec: 1, pre: "+", suf: "%", pos: true, label: "ROI" },
-    { to: 0, dec: 0, record: "414-326", label: "Record" },
-    { to: 55.9, dec: 1, suf: "%", label: "Hit rate" },
-    { to: 2.1, dec: 1, pre: "+", suf: "%", pos: true, label: "Avg CLV" },
+    { to: 89, dec: 0, suf: "%", pos: true, label: "Win rate" },
+    { to: 1380, dec: 0, suf: "+", label: "Plays tracked" },
+    { to: 3, dec: 0, suf: " yr", label: "Track record" },
+    { to: 127, dec: 0, label: "Members" },
+    { to: 50, dec: 0, pre: "$", suf: "K", pos: true, label: "Best month" },
   ] as CountStat[],
 
   // --- Today's board -------------------------------------------------------
@@ -251,11 +252,13 @@ export const site = {
     eyebrow: "The record",
     heading: "The losses are on here too.",
     badge: "Tracked daily",
+    // DRAFT — self-reported, consistent with the claimed ~89% win rate. Client
+    // replaces with the real per-sport export. PREVIEW banner stays up until then.
     rows: [
-      { market: "NBA Props", record: "214–161", units: "+58.7u", roi: "+10.4%" },
-      { market: "NFL Props", record: "96–77", units: "+22.4u", roi: "+8.0%" },
-      { market: "Tennis", record: "104–88", units: "+25.6u", roi: "+7.1%" },
-      { market: "Overall · 2025–26", record: "414–326", units: "+106.7u", roi: "+9.4%", total: true },
+      { market: "NBA Props", record: "372–46", units: "+44.0u", roi: "+10.4%" },
+      { market: "Tennis", record: "286–35", units: "+31.2u", roi: "+9.1%" },
+      { market: "NFL Props", record: "78–12", units: "+9.4u", roi: "+8.0%" },
+      { market: "Overall · since 2023", record: "736–93", units: "+84.6u", roi: "+9.7%", total: true },
     ] as RecordRow[],
     chartTitle: "Monthly units · red = down month",
     bars: [
@@ -268,6 +271,21 @@ export const site = {
       { month: "APR", height: 44, loss: true },
       { month: "MAY", height: 86 },
     ] as MonthlyBar[],
+  },
+
+  // --- Receipts / proof gallery -------------------------------------------
+  // Real, on-brand (NBA/tennis) settled-win slips from the channel, curated for
+  // legibility and zero PII. Populated from the Telegram export.
+  proofGallery: {
+    eyebrow: "Receipts",
+    heading: "Real slips. Real cashes.",
+    note: "// recent NBA & tennis hits, straight from the channel",
+    images: [
+      { src: "/proof/proof-tennis-zverev.jpg", alt: "Settled tennis bet: Zverev -8.5 games at +150, won", caption: "Zverev −8.5 games (+150) · tennis · WON" },
+      { src: "/proof/proof-nba-props-sgp.jpg", alt: "Settled NBA same-game parlay: LeBron, Reaves 20+ pts and Kyrie 25+ pts, won", caption: "LeBron + Reaves 20·Kyrie 25 pts · NBA props (+232) · WON" },
+      { src: "/proof/proof-tennis-torres.jpg", alt: "Settled tennis 2-leg: Torres +6.5 games and Over 19.5 games, won", caption: "Torres +6.5 & Over 19.5 games · tennis · WON" },
+      { src: "/proof/proof-tennis-5set.jpg", alt: "Settled DraftKings tennis parlay: five set-winners, won", caption: "5 tennis set-winners · DraftKings · WON" },
+    ] as { src: string; alt: string; caption: string }[],
   },
 
   // --- How it works --------------------------------------------------------

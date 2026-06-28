@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import Board from "@/components/Board";
 import Record from "@/components/Record";
+import ProofGallery from "@/components/ProofGallery";
 import About from "@/components/About";
 import HowItWorks from "@/components/HowItWorks";
 import Pricing from "@/components/Pricing";
@@ -14,6 +15,7 @@ export default function Home() {
       <Hero />
       <Board />
       <Record />
+      <ProofGallery />
       <About />
       <HowItWorks />
       <Pricing />
