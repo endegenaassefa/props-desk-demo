@@ -143,15 +143,16 @@ const freeChannel = (process.env.NEXT_PUBLIC_FREE_CHANNEL_URL ?? "").trim();
 
 export const site = {
   // --- Identity ------------------------------------------------------------
-  /** PLACEHOLDER brand name. */
-  brand: "THE PROPS DESK",
+  /** Brand name (confirmed from client intake). */
+  brand: "SPORTS MONEY GAMES",
   /** Brand name as plain words (for prose / metadata). */
-  brandPlain: "The Props Desk",
-  /** Legal entity that appears in © and legal copy. PLACEHOLDER. */
-  legalEntity: "The Props Desk",
-  domain: "thepropsdesk.com",
+  brandPlain: "Sports Money Games",
+  /** Legal entity that appears in © and legal copy. */
+  legalEntity: "Sports Money Games Incorporated",
+  /** PLACEHOLDER domain — client confirms the real one (set via NEXT_PUBLIC_SITE_URL at deploy). */
+  domain: "sportsmoneygames.com",
   /** Canonical site URL — overridden by NEXT_PUBLIC_SITE_URL in production. */
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://thepropsdesk.com").replace(/\/$/, ""),
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://sportsmoneygames.com").replace(/\/$/, ""),
 
   /** Whether to show the "PREVIEW · sample data" banner. KEEP TRUE until every
    *  placeholder below is replaced with the client's real tracked info. */
@@ -161,7 +162,7 @@ export const site = {
 
   // --- SEO / meta ----------------------------------------------------------
   seo: {
-    title: "The Props Desk — NBA, NFL & Tennis Player Props",
+    title: "Sports Money Games — NBA, NFL & Tennis Player Props",
     description:
       "Daily NBA, NFL & tennis player-prop signals with a tracked, loss-inclusive record you can check before you pay. 21+, entertainment only.",
     ogTitle: "Read the player. Not the hype.",
@@ -344,7 +345,7 @@ export const site = {
 
   /** Contact + socials. PLACEHOLDERS — fill with the client's real handles. */
   contact: {
-    email: "hello@thepropsdesk.com",
+    email: "hello@sportsmoneygames.com",
     telegram: "", // free channel handle/link, e.g. https://t.me/...
     x: "", // https://x.com/...
     instagram: "", // https://instagram.com/...
