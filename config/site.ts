@@ -98,10 +98,19 @@ export interface Tier {
 }
 
 export interface Testimonial {
+  /** The quote text. Leave empty ("") if you're using a `screenshot` instead. */
   quote: string;
+  /** 1–2 letters for the avatar bubble (e.g. a real first-name + last initial). */
   initials: string;
+  /** Display name — a real first name + last initial, or handle. Keep it REAL. */
   name: string;
+  /** When they said it, e.g. "Mar 2026". */
   date: string;
+  /** Optional context line, e.g. "Telegram member · 8 mo" or "Day pass → annual". */
+  source?: string;
+  /** Optional: path (in /public) to a real DM screenshot, shown instead of text.
+   *  e.g. "/testimonials/dm-1.png". Use only with the member's consent. */
+  screenshot?: string;
 }
 
 export interface FaqItem {
@@ -325,14 +334,21 @@ export const site = {
   },
 
   // --- Testimonials --------------------------------------------------------
+  // ⚠ PLACEHOLDERS — swap for the client's REAL, consented member quotes. Use
+  // ONLY real ones (fake testimonials are an FTC problem and a trust-killer).
+  // To add a real quote: fill quote + a real name + initials + date, and
+  // optionally a `source` tag. For a real DM screenshot instead of text, set
+  // `screenshot` to an image you drop in /public/testimonials/ and leave quote "".
+  // The grid handles any count — 3 or 6 look best. PREVIEW banner flags these
+  // as samples until the real ones land.
   proof: {
     eyebrow: "Members",
     heading: "They stuck around.",
-    note: "// real, dated quotes go here",
+    note: "// awaiting real member quotes",
     testimonials: [
-      { quote: "The losses are right there on the record. Nobody else shows those.", initials: "DJ", name: "[Member]", date: "Mar 2026" },
-      { quote: "He'll tell you when it's a pass. That's how I knew it was real.", initials: "RM", name: "[Member]", date: "Feb 2026" },
-      { quote: "Came for a day pass. Stayed for the season.", initials: "KT", name: "[Member]", date: "Apr 2026" },
+      { quote: "The losses are right there on the record. Nobody else shows those.", initials: "—", name: "[Real name]", date: "Mar 2026", source: "Telegram member" },
+      { quote: "He'll tell you when it's a pass. That's how I knew it was real.", initials: "—", name: "[Real name]", date: "Feb 2026", source: "Monthly member" },
+      { quote: "Came for a day pass. Stayed for the season.", initials: "—", name: "[Real name]", date: "Apr 2026", source: "Day pass → annual" },
     ] as Testimonial[],
   },
 

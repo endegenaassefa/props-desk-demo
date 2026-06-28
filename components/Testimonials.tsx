@@ -15,16 +15,24 @@ export default function Testimonials() {
         <div className="quotes">
           {proof.testimonials.map((t, i) => (
             <figure className="q reveal" key={i}>
-              <blockquote>
-                <p>&ldquo;{t.quote}&rdquo;</p>
-              </blockquote>
+              {t.screenshot ? (
+                <div className="q-shot">
+                  {/* Real member DM screenshot (varying dimensions) — plain img is correct here. */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={t.screenshot} alt={`Message from ${t.name}`} loading="lazy" decoding="async" />
+                </div>
+              ) : (
+                <blockquote>
+                  <p>&ldquo;{t.quote}&rdquo;</p>
+                </blockquote>
+              )}
               <figcaption className="by">
                 <span className="av" aria-hidden="true">
                   {t.initials}
                 </span>
                 <div>
                   <div className="nm">{t.name}</div>
-                  <div className="dt">{t.date}</div>
+                  <div className="dt">{t.source ? `${t.source} · ${t.date}` : t.date}</div>
                 </div>
               </figcaption>
             </figure>
