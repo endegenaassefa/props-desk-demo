@@ -1,85 +1,94 @@
-# The Props Desk — Sports-Picks Website (front-end demo)
+# The Props Desk
 
-A front-end demo for a sports-betting **player-props** tipster site (NBA · NFL · ATP/WTA tennis).
-Built to close a client on a $600 build. This repo is the **front-end only** — the goal now is to
-wire up real content + payments + delivery and ship it.
+A production-grade marketing + subscription site for a sports player-props tipster
+(NBA · NFL · ATP/WTA). Built in Next.js, ported 1:1 from the approved design demo,
+with Whop-powered checkout + private-Telegram delivery wired in (env-gated).
 
-> **Brand name `THE PROPS DESK` is a placeholder** for the client's real personal brand.
+> **Status:** deployed-ready, content is placeholder, payments are wired but
+> UNTESTED-PENDING-CLIENT. See [HANDOFF.md](HANDOFF.md) and [PLACEHOLDERS.md](PLACEHOLDERS.md).
+> The original single-file demo is preserved at [`docs/legacy-demo.html`](docs/legacy-demo.html).
 
 ---
 
-## Run it locally
+## What it is
 
-No build step. It's a single self-contained `index.html` (inline CSS + vanilla JS, Google Fonts via CDN).
+A fast, dark "research-desk" one-pager whose entire job is **credibility to cold
+traffic**: a live prop-board terminal, a tracked **loss-inclusive** record, count-up
+stats, pricing tiers, testimonials, and FAQ — plus real legal pages and a Whop
+checkout/delivery layer. The trust spine is the honest tracked record, not a hero
+win-rate.
+
+## Run it
 
 ```bash
-# option A — just open it
-open index.html        # or double-click
+npm install
+npm run dev        # http://localhost:3000
 
-# option B — serve it (recommended; matches how we've been viewing it)
-python3 -m http.server 8080
-# → http://localhost:8080
+# production
+npm run build && npm start
+
+# quality gates
+npm run typecheck  # tsc --noEmit
+npm run lint       # next lint
+npm test           # node --test (Whop webhook unit tests, 23)
 ```
 
----
+No env vars are required to run — payment CTAs fall back to a harmless anchor and the
+webhook reports "not configured" until you add secrets. Copy `.env.example` →
+`.env.local` to wire Whop.
 
-## What's here
+## Project structure
 
-- `index.html` — the entire site (hero + live prop-board terminal, today's board, tracked-record
-  table + units chart, how-it-works, pricing tiers, testimonials, FAQ, footer + legal disclaimer).
-- Live touches: ticking clock, auto-rotating prop feed, count-up metrics, a climbing live in-game stat.
+```
+app/
+  layout.tsx              root shell: fonts, metadata, nav/footer, global chrome
+  page.tsx                home one-pager (composes the section components)
+  globals.css             the design system, ported VERBATIM from the demo
+  terms|disclaimer|refunds|responsible-gaming/   legal pages (draft-for-review)
+  not-found.tsx           branded 404
+  robots.ts, sitemap.ts, opengraph-image.tsx, icon.svg   SEO
+  api/whop/webhook/route.ts   Whop webhook (verify + fulfillment seam), env-gated
+components/               Nav, Hero, Terminal, StatStrip, Board, LiveStatCell,
+                         Record, HowItWorks, Pricing, Testimonials, FAQ, Closer,
+                         Footer, ScrollEffects, Analytics, PreviewBanner, LegalPage
+config/site.ts           ⭐ the SINGLE source of all client-specific content
+lib/whop.ts              Standard Webhooks signature verification (zero-dep)
+lib/whop.test.ts         + app/api/whop/webhook/route.test.ts  (23 tests)
+lib/payments-crypto.ts   NOWPayments fallback — documented, not wired
+docs/legacy-demo.html    the approved demo, kept for parity reference
+docs/verification/       screenshot evidence of visual parity
+```
 
-## Design system (keep it consistent)
+## Design system
 
-- **Fonts:** `Big Shoulders Display` (uppercase headlines — athletic/varsity), `Archivo` (body),
-  `IBM Plex Mono` (data/terminal).
-- **Theme:** dark ink (`--ink #07080a`), warm cream text, single signal-green accent (`--signal #37e493`),
-  clay (`--clay`) for losses/misses. CSS variables live in `:root`.
-- **Direction:** "research desk," NOT a neon capper site. This is intentional — see constraints below.
+Ported verbatim — do not restyle (visual parity is a hard constraint):
 
----
+- **Aesthetic:** near-black (`--ink #07080a`) research desk, signal-green accent
+  (`--signal #37e493`), clay (`--clay #ff7245`) for live/loss, subtle film grain.
+- **Type:** Big Shoulders Display (uppercase headlines) · Archivo (body) ·
+  IBM Plex Mono (data) — loaded via Google Fonts to preserve the exact CSS.
+- **Motion:** ticking ET clock, rotating prop feed, count-ups, scroll reveals,
+  record-bar growth, a live climbing board stat — all re-implemented as client
+  components that **respect `prefers-reduced-motion`**.
 
-## Everything that's a PLACEHOLDER (swap with real client info)
+## Non-negotiable constraints (research-backed — do not undo)
 
-Look for the `PREVIEW · sample data` strip and HTML comments. Replace:
+1. **Payments = Whop**, never raw Stripe/PayPal (they prohibit handicapping and freeze
+   funds). Crypto (NOWPayments) is the only documented fallback, not wired.
+2. **Don't lead with a big win-rate.** Hit rate is a secondary stat; the tracked,
+   loss-inclusive record carries trust. (The client's claimed "89%" is deliberately
+   not used — a big % reads as the #1 scam tell to cold traffic.)
+3. **No luxury-flex imagery.** Credibility over flash.
+4. **21+ / entertainment-only** framing stays everywhere relevant.
 
-- Brand name `THE PROPS DESK` → client's real brand.
-- The record numbers (`+106.7u`, `414–326`, `+9.4%`, the per-sport table, the monthly bars).
-- The prop board cards + the rotating terminal `POOL` array (sample players/lines).
-- Testimonials (the `[Member]` quotes).
-- About/origin copy (we collect this via the client questionnaire + a 2-min voice intro).
-- Pricing — confirm with client (currently Day $10 / Week $35 / Monthly $100 / Props Pro $150 / Coaching $1,500+).
-- All `#` links (socials, Telegram, contact, legal pages).
+## Verification
 
----
+Production build is clean (12 routes, ~110 kB First Load JS on home). The home,
+board, record, pricing, FAQ, mobile, a legal page, and the 404 were screenshot-
+verified against the demo — see [`docs/verification/`](docs/verification/). The
+payment code is unit-tested and independently codex-reviewed (see HANDOFF.md).
 
-## Next steps to make it real (the actual remaining work)
+## Deploy
 
-1. **Swap in real content** from the client's questionnaire answers.
-2. **Payments + delivery — use WHOP.** ⚠️ Critical: **Stripe and PayPal prohibit sports-picks/handicapping
-   and will freeze funds.** Whop *explicitly allows* picks businesses and natively does checkout +
-   subscriptions + **auto private-Telegram delivery + anti-resharing**. Wire each pricing CTA to the
-   client's Whop product/checkout. Crypto (NOWPayments) is the documented fallback.
-   - Note: Whop is not a liability shield — seller still owns chargebacks; keep refund terms clear.
-3. **Verifiable record:** link/embed a real tracked record (Pikkit `BookSync` or Betstamp public profile)
-   that shows wins **and** losses. This is the trust spine.
-4. **Legal pages:** real Terms / Disclaimer / Refund + 21+ / responsible-gambling. The footer already has
-   the entertainment-only disclaimer language to expand.
-5. **Deploy** (Vercel/Netlify, static) once content + Whop links are in.
-
----
-
-## Hard constraints (research-backed — do NOT undo these)
-
-- **Don't lead with the "89% win rate."** Believable handicapper rates are ~54–57%; a big % reads as the
-  #1 scam tell to cold traffic. Lead with the *tracked, loss-inclusive record* instead.
-- **No luxury-flex imagery** (cars/cash/watches) on this site — it lowers trust for cold sports-betting
-  traffic. (Fine for the client's personal IG, not here.)
-- **Don't promise Stripe/PayPal** for payments (see step 2).
-
----
-
-## Status
-
-Front-end demo, ready for content + payment wiring. Client docs (proposal, questionnaire) live outside
-this repo. Built with research grounded in real competitor sites (DubClub, Betstamp, WagerTalk).
+Build-ready for Vercel (auto-detects Next.js). One-command steps and the env-var map
+are in [HANDOFF.md](HANDOFF.md).
