@@ -30,7 +30,7 @@ export default function Hero() {
             <span>
               <b>Wins + losses</b> shown
             </span>
-            <span>Third-party tracked</span>
+            <span>Tracked daily</span>
             <span>21+ · entertainment only</span>
           </div>
         </div>

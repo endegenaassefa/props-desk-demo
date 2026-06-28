@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import Board from "@/components/Board";
 import Record from "@/components/Record";
+import About from "@/components/About";
 import HowItWorks from "@/components/HowItWorks";
 import Pricing from "@/components/Pricing";
 import Testimonials from "@/components/Testimonials";
@@ -13,6 +14,7 @@ export default function Home() {
       <Hero />
       <Board />
       <Record />
+      <About />
       <HowItWorks />
       <Pricing />
       <Testimonials />

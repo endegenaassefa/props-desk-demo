@@ -175,15 +175,32 @@ export const site = {
     headlineLine1: "Read the player.",
     headlineEmphasis: "Not",
     headlineRest: "the hype.",
-    sub: "Daily NBA, NFL & tennis prop signals, with a tracked record you can check before you pay a cent.",
+    sub: "A sports consultant's daily read on NBA, NFL & tennis player props — tracked, wins and losses, so you can check it before you pay a cent.",
     ctaPrimary: "Get today's props",
     ctaSecondary: "See the record →",
-    micro: ["Wins + losses shown", "Third-party tracked", "21+ · entertainment only"],
+    micro: ["Wins + losses shown", "Tracked daily", "21+ · entertainment only"],
   },
 
-  /** Origin / bio — shown nowhere by default in the demo, but kept here so the
-   *  client's real story can be dropped into an About block later. PLACEHOLDER. */
-  bio: "Player-prop research for NBA, NFL and tennis. Every play posted before tip, every result — win or loss — logged to a public, third-party-tracked record.",
+  /** Origin / bio — real, from the client's own intake. Rendered in the About
+   *  section. */
+  bio: "I'm a professional sports consultant — not a bettor. I study players, leagues, coaches, and referees, and I read the situational matchups most people miss.",
+
+  // --- About / who's behind the read --------------------------------------
+  about: {
+    eyebrow: "Who's behind the read",
+    heading: "A consultant, not a capper.",
+    body: [
+      "I'm a professional sports consultant — not a bettor. I study players, leagues, coaches, and referees, and I read the situational matchups most people miss: who's hurt, who's matching up, how a specific ref calls a game, and the lines that repeat week after week.",
+      "My background's in athletics. I ran track — the 100, 200 and 400 — at Ole Miss, and I've done this seriously for eight years. My lane is NBA player props and tennis, ATP and WTA. I read superstars, because patterns hold.",
+      "I'm not in it for the money — I run a few businesses. I do this because earning is hard right now, and I'd rather help people supplement their income with a disciplined read than sell anybody a dream.",
+    ],
+    creds: [
+      { k: "Ole Miss", v: "Track athlete · 100 / 200 / 400" },
+      { k: "8 Years", v: "Reading props seriously" },
+      { k: "NBA + Tennis", v: "Player props · ATP / WTA" },
+      { k: "Daily", v: "Every play posted before tip" },
+    ],
+  },
 
   // --- Stat strip (hero count-ups) ----------------------------------------
   // NOTE (constraint #2): hit rate is intentionally a modest ~55.9% and NOT the
@@ -232,7 +249,7 @@ export const site = {
   record: {
     eyebrow: "The record",
     heading: "The losses are on here too.",
-    badge: "Third-party tracked",
+    badge: "Tracked daily",
     rows: [
       { market: "NBA Props", record: "214–161", units: "+58.7u", roi: "+10.4%" },
       { market: "NFL Props", record: "96–77", units: "+22.4u", roi: "+8.0%" },
@@ -273,7 +290,7 @@ export const site = {
     freeChannelConfigured: Boolean(freeChannel),
     tiers: [
       { id: "day", name: "Day", price: "$10", per: "/day", hook: "One slate. All in.", cta: "Get the day", envVar: "NEXT_PUBLIC_WHOP_CHECKOUT_DAY", ...checkout.day },
-      { id: "week", name: "Week", price: "$35", per: "/wk", hook: "Seven days of slates.", cta: "Get the week", envVar: "NEXT_PUBLIC_WHOP_CHECKOUT_WEEK", ...checkout.week },
+      { id: "week", name: "Week", price: "$30", per: "/wk", hook: "Seven days of slates.", cta: "Get the week", envVar: "NEXT_PUBLIC_WHOP_CHECKOUT_WEEK", ...checkout.week },
       { id: "month", name: "Monthly", price: "$100", per: "/mo", hook: "Every prop, every day.", cta: "Subscribe", featured: true, badge: "Most popular", envVar: "NEXT_PUBLIC_WHOP_CHECKOUT_MONTH", ...checkout.month },
       { id: "props", name: "Props Pro", price: "$150", per: "/mo", hook: "Top-conviction card + live reads.", cta: "Go Pro", envVar: "NEXT_PUBLIC_WHOP_CHECKOUT_PROPS", ...checkout.props },
     ] as Tier[],
