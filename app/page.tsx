@@ -12,13 +12,17 @@ import Closer from "@/components/Closer";
 export default function Home() {
   return (
     <>
+      {/* Section order is CLIENT-DIRECTED (Bake, 2026-06-review):
+          hero → packages → today's board → real slips, then the deeper
+          story sections. The buy action sits one screen from the top:
+          "I want this ready to buy. Click, click, card." */}
       <Hero />
+      <Pricing />
       <Board />
-      <Record />
       <ProofGallery />
+      <Record />
       <About />
       <HowItWorks />
-      <Pricing />
       <Testimonials />
       <FAQ />
       <Closer />

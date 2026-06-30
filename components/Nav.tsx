@@ -1,18 +1,23 @@
 import Link from "next/link";
+import Image from "next/image";
 import { site } from "@/config/site";
-
-// Render the brand with non-breaking spaces so it never wraps in the nav bar
-// (matches the &nbsp; the demo used). char 160 = U+00A0 non-breaking space.
-const NBSP = String.fromCharCode(160);
-const brandNbsp = site.brand.split(" ").join(NBSP);
 
 export default function Nav() {
   return (
     <header className="nav">
       <div className="wrap nav-in">
         <Link href="/" className="brand" aria-label={`${site.brandPlain} — home`}>
-          <span className="dot" aria-hidden="true"></span>
-          {brandNbsp}
+          {/* Logo in the corner — Bake's call. The mark already contains the
+              wordmark, so it doubles as the brand name. */}
+          <Image
+            src="/logo.png"
+            alt={site.brandPlain}
+            width={1024}
+            height={492}
+            priority
+            sizes="200px"
+            style={{ height: 38, width: "auto" }}
+          />
         </Link>
         <nav className="nav-links" aria-label="Primary">
           <Link href="/#board">Today&apos;s board</Link>
