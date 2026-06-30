@@ -326,7 +326,7 @@ export const site = {
       eyebrow: "High-ticket",
       name: "1-on-1 Coaching",
       body: "Learn the read. Not just the picks.",
-      price: "From $1,500/mo · limited seats",
+      price: "From $500/mo · limited seats",
       cta: "Apply",
       envVar: "NEXT_PUBLIC_WHOP_CHECKOUT_COACHING",
       ...checkout.coaching,
