@@ -106,10 +106,17 @@ vercel env add WHOP_WEBHOOK_SECRET production
 vercel --prod
 ```
 
+**Turnkey path (project is already linked + deployed):** once Bake hands over his Whop
+values, `cp .env.whop.local.example .env.whop.local`, fill it in, then run
+`bash scripts/wire-whop.sh`. It pushes every var to Vercel **production** and redeploys
+(NEXT_PUBLIC_* are baked at build time, so the redeploy is required). The production
+webhook URL to register in Whop is
+`https://sports-money-games.vercel.app/api/whop/webhook`.
+
 Or connect the GitHub repo in the Vercel dashboard for automatic deploys on push
 (recommended). Framework preset auto-detects **Next.js**; no special build config
 needed. After deploy, set the Whop webhook URL to
-`https://<your-domain>/api/whop/webhook`.
+`https://sports-money-games.vercel.app/api/whop/webhook`.
 
 > Vercel was **not** auto-deployed from here because this environment isn't
 > authenticated to the client's Vercel account. The build is verified locally; the
