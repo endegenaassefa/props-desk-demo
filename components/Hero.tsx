@@ -18,7 +18,10 @@ export default function Hero() {
           </h1>
           <p className="sub reveal">{hero.sub}</p>
           <div className="hero-cta reveal">
-            <Link href="/#pricing" className="btn btn-primary">
+            {/* Primary CTA shows the free board (today's props) — "check it
+                out before you pay a cent." Buy path is the packages directly
+                below + the nav button + the board's own CTA. */}
+            <Link href="/#board" className="btn btn-primary">
               {hero.ctaPrimary}
             </Link>
             <Link href="/#record" className="btn btn-ghost">

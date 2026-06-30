@@ -255,3 +255,20 @@ footer{border-top:1px solid var(--line);padding:50px 0 36px;background:var(--ink
 .nf h1{font-size:clamp(56px,12vw,120px);margin:14px 0 10px}
 .nf p{color:var(--cream-dim);font-size:17px;margin-bottom:28px}
 .nf .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* Board free-preview CTA (review-1) — closes the preview→buy loop */
+.board-cta{text-align:center;margin-top:30px}
+.board-cta p{color:var(--cream-dim);font-size:15px;margin-bottom:14px}
+
+/* Mobile sticky buy bar (review-1) — QR/phone traffic stays one tap from buying */
+.mobile-buy-bar{display:none}
+@media(max-width:900px){
+  .mobile-buy-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:80;align-items:center;justify-content:space-between;gap:14px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(7,8,10,.92);backdrop-filter:blur(12px) saturate(1.2);border-top:1px solid var(--line)}
+  .mobile-buy-bar .mbb-copy{display:flex;flex-direction:column;line-height:1.12}
+  .mobile-buy-bar .mbb-from{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:15px;color:var(--cream)}
+  .mobile-buy-bar .mbb-sub{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--signal);margin-top:2px}
+  .mobile-buy-bar .btn{padding:11px 22px;white-space:nowrap}
+  body{padding-bottom:72px}
+}
+/* Full-width, fat-thumb hero CTAs on phones (review-1) */
+@media(max-width:520px){.hero-cta{flex-direction:column;align-items:stretch}.hero-cta .btn{width:100%;justify-content:center}}

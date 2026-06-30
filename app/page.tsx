@@ -8,6 +8,7 @@ import Pricing from "@/components/Pricing";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import Closer from "@/components/Closer";
+import MobileBuyBar from "@/components/MobileBuyBar";
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
       <Testimonials />
       <FAQ />
       <Closer />
+      <MobileBuyBar />
     </>
   );
 }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { site } from "@/config/site";
 import type { PlayStatus } from "@/config/site";
 import LiveStatCell from "./LiveStatCell";
@@ -53,6 +54,12 @@ export default function Board() {
               </div>
             </div>
           ))}
+        </div>
+        <div className="board-cta reveal">
+          <p>Today&apos;s slate is free to read. Wins and losses, posted before tip.</p>
+          <Link href="/#pricing" className="btn btn-primary">
+            Like the read? See the plans &rarr;
+          </Link>
         </div>
       </div>
     </section>
